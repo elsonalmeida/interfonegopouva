@@ -4,90 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interfone Coletivo</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #f4f4f9, #e8f5e9);
-      text-align: center;
-      padding: 20px;
-    }
-    h2 {
-      color: #333;
-      margin-bottom: 20px;
-    }
-    h3 {
-      color: #333;
-      margin-bottom: 20px;
-    }
-    .lista {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.2s ease;
-    }
-    .btn:hover {
-      transform: scale(1.05);
-    }
-    .andar1 { background: #25D366; } /* verde WhatsApp */
-    .andar2 { background: #128C7E; } /* verde escuro */
-    .andar3 { background: #075E54; } /* verde mais profundo */
-    img.icon {
-      width: 24px;
-      height: 24px;
-    }
-  </style>
 </head>
 <body>
-  <h2>INTERFONE DO CONDOMÍNIO</h2>
-  <h3>Selecione o Apartamento</h3>
-    <div id="lista" class="lista"></div>
+  <h2>Selecione o apartamento</h2>
+  <button onclick="chamar('101')">Apartamento 101 - Gabriel</button>
+  <button onclick="chamar('102')">Apartamento 102 - Giovanne</button>
+  <button onclick="chamar('103')">Apartamento 103 - Carlos</button>
 
   <script>
-    async function carregarMoradores() {
-      try {
-        const response = await fetch("moradores.json");
-        const moradores = await response.json();
-
-        const lista = document.getElementById("lista");
-        moradores.forEach(m => {
-          const btn = document.createElement("button");
-          btn.className = "btn " + (m.apto.includes("1") ? "andar1" : m.apto.includes("2") ? "andar2" : "andar3");
-          btn.innerHTML = `<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="icon"> ${m.apto} - ${m.nome}`;
-          btn.onclick = () => chamar(m.numero, m.apto);
-          lista.appendChild(btn);
-        });
-      } catch (error) {
-        console.error("Erro ao carregar moradores:", error);
-      }
+    function chamar(apto) {
+      // Faz requisição para o backend
+      fetch(`/chamar/${apto}`, { method: "POST" })
+        .then(() => alert(`Chamando o morador do apto ${apto}...`))
+        .catch(err => alert("Erro ao chamar morador"));
     }
-
-    function chamar(numero, apto) {
-      let mensagem = `INTERFONE DO CONDOMÍNIO  Olá, estou no portão para o ${apto} `;
-      let url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
-      window.location.href = url;
-    }
-
-    carregarMoradores();
   </script>
 </body>
 </html>
-
-
-
-
